@@ -36,7 +36,7 @@ public class AboutJcfsActivity extends BaseActivity {
                     public void onClick(View v) {
                         EditText userInput = ((EditText) v.findViewById(R.id.userInput));
                         if (userInput != null && md5(userInput.getText().toString()).equals("c51ce410c124a10e0db5e4b97fc2af39")) {
-
+                            getDatabase().cleanSkillsDb();
                             getDatabase().putSkill("Java, C/C++");
                             getDatabase().putSkill("Spring");
                             getDatabase().putSkill("Hibernate");

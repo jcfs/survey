@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Database extends SQLiteOpenHelper {
 
-	private static final int database_VERSION = 6;
+	private static final int database_VERSION = 7;
 	private static final String database_NAME = "FTSurveyDB";
 	private static final String tableAdminSettings = "admin_settings";
 	private static final String tableSkills = "skills";
@@ -42,6 +42,14 @@ public class Database extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS "+tableAdminSettings);
 		db.execSQL("DROP TABLE IF EXISTS "+tableSkills);
 		this.onCreate(db);
+	}
+
+	public void cleanSkillsDb() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		db.execSQL("DROP TABLE IF EXISTS "+tableSkills);
+		db.execSQL("CREATE TABLE "+tableSkills+" (id TEXT PRIMARY KEY NOT NULL)");
+		db.close();
 	}
 
 	public void put(String key, String value) {
