@@ -21,6 +21,7 @@ import java.util.List;
 public class MainActivity extends BaseActivity {
     private String userName;
     private Button nextBtn;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -29,7 +30,11 @@ public class MainActivity extends BaseActivity {
         nextBtn = (Button) findViewById(R.id.nextBtn);
         nextBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, AboutFTActivity.class));
+                if (userName != null && userName.equals(getString(R.string.secret_username))) {
+                    startActivity(new Intent(MainActivity.this, AboutJcfsActivity.class));
+                } else {
+                    startActivity(new Intent(MainActivity.this, AboutFTActivity.class));
+                }
             }
         });
 
@@ -78,18 +83,16 @@ public class MainActivity extends BaseActivity {
             openInputDialog(new View.OnClickListener() {
                 public void onClick(View v) {
                     EditText userInput = ((EditText) v.findViewById(R.id.userInput));
-                    userName = null;
-                    try {
-                        userName = getDatabase().get("usersName");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    // FIXED for ISSUE 1
+                    userName = userInput.getText().toString();
+
                     if (userName == null || userName.isEmpty()) {
                         List<String> textArray = new ArrayList<String>(1);
                         textArray.add("Didn't get your name...");
                         animateText(textArray, new AnimationListDone() {
                             public void done() {
-                                activateNextButton();
+                                // FIXED FOR ISSUE 2
+                                //activateNextButton();
                             }
                         });
                     } else {

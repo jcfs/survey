@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">FT-Survey</string>
     <string name="action_settings">Settings</string>
+    <string name="skill_Android">Android</string>
+    <string name="skill_Java">Java</string>
+    <string name="skill_SoftwareDeveloper">Software Developer</string>
+    <string name="skill_alreadyExists">Skill \"%s\" already exists"</string>
+    <string name="skill_deleted">Skill \"%s\" deleted"</string>
+    <string name="title_activity_about_jcfs">AboutJcfsActivity</string>
+    <string name="secret_username">jcfs</string>
 </resources>

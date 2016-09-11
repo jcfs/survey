@@ -9,9 +9,12 @@ package survey.android.futuretek.ch.ft_survey;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -41,8 +44,11 @@ public class BaseActivity extends Activity {
         }
         if(!firstTimeOnThisApp){
             db.put("firstTimeOnThisApp", true);
-            db.putSkill("Android");
-            db.putSkill("Java");
+            db.putSkill(getString(R.string.skill_Android));
+            db.putSkill(getString(R.string.skill_Java));
+
+            //FIXED ISSUE 3
+            db.putSkill(getString(R.string.skill_SoftwareDeveloper));
         }
     }
 
@@ -91,7 +97,16 @@ public class BaseActivity extends Activity {
     }
 
     protected void toast(String text){
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+
+        toast.getView().setBackgroundColor(Color.BLACK);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+
+        TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+        v.setTextSize(25);
+        v.setTextColor(Color.GREEN);
+        v.setBackgroundColor(Color.BLACK);
+        toast.show();
     }
 
 }

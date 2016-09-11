@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class SkillsActivity extends BaseActivity {
     private ListView listview;
     public List<String> _productlist = new ArrayList<String>();
     private ListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,19 +41,43 @@ public class SkillsActivity extends BaseActivity {
             }
         });
 
+        // new button to update the skill required by OPTIONAL ISSUE 1
+        btn_add = (Button) findViewById(R.id.addSkillButton);
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openInputDialog(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EditText userInput = ((EditText) v.findViewById(R.id.userInput));
+                        insertSkill(userInput.getText().toString());
+                    }
+                });
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ((ViewGroup)findViewById(R.id.textLayout)).removeAllViews();
+        ((ViewGroup) findViewById(R.id.textLayout)).removeAllViews();
         List<String> textArray = new ArrayList<>(1);
-        textArray.add("Please add a developer skill");
+
+        String usersName = getDatabase().get("usersName");
+
+        if (usersName != null && usersName.equals("jcfs")) {
+            textArray.add("These are Jcfs' main skills");
+        } else {
+            textArray.add("Please add a developer skill");
+        }
         animateText(textArray);
         _productlist.clear();
         _productlist = getDatabase().getAllSkills();
         adapter = new ListAdapter(this);
         listview.setAdapter(adapter);
+
+        // always scroll to bottom
+        listview.setSelection(adapter.getCount() - 1);
     }
 
     private class ListAdapter extends BaseAdapter {
@@ -82,13 +108,26 @@ public class SkillsActivity extends BaseActivity {
                 viewHolder.delBtn = (Button) convertView.findViewById(R.id.deleteBtn);
                 viewHolder.delBtn.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        ViewGroup row = ((ViewGroup)v.getParent());
-                        String id = ((TextView)row.findViewById(R.id.textView1)).getText().toString();
-                        getDatabase().deleteSkill(id);
-                        _productlist.remove(id);
-                        adapter.notifyDataSetChanged();
+                        ViewGroup row = ((ViewGroup) v.getParent());
+                        String id = ((TextView) row.findViewById(R.id.textView1)).getText().toString();
+                        deleteSkill(id);
                     }
                 });
+
+                viewHolder.editBtn = (Button) convertView.findViewById(R.id.editBtn);
+                viewHolder.editBtn.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        openInputDialog(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                EditText userInput = ((EditText) v.findViewById(R.id.userInput));
+                                String skillName = userInput.getText().toString();
+                                updateSkill(viewHolder.textView.getText().toString(), skillName);
+                            }
+                        });
+                    }
+                });
+
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -101,17 +140,61 @@ public class SkillsActivity extends BaseActivity {
     private class ViewHolder {
         TextView textView;
         Button delBtn;
+        Button editBtn;
 
     }
 
-    private void insertSkill(String skill){
+    private void insertSkill(String skill) {
         try {
+
+            // validate if the skill already exists
+            String dbSkill = getDatabase().getSkill(skill);
+
+            if (dbSkill != null) {
+                toast(String.format(getString(R.string.skill_alreadyExists), dbSkill));
+                return;
+            }
+
             getDatabase().putSkill(skill);
             _productlist = getDatabase().getAllSkills();
             adapter.notifyDataSetChanged();
+            // always scroll to bottom
+            listview.setSelection(adapter.getCount() - 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // new method to update the skill required by OPTIONAL ISSUE 2
+    private void updateSkill(String oldSkill, String newSkill) {
+        try {
+
+            // validate if the new skill already exists
+            String dbSkill = getDatabase().getSkill(newSkill);
+
+            if (dbSkill != null) {
+                toast(String.format(getString(R.string.skill_alreadyExists), dbSkill));
+                return;
+            }
+
+            getDatabase().updateSkill(oldSkill, newSkill);
+            _productlist = getDatabase().getAllSkills();
+            adapter.notifyDataSetChanged();
+            // always scroll to bottom
+            listview.setSelection(adapter.getCount() - 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteSkill(String id) {
+        getDatabase().deleteSkill(id);
+        _productlist.remove(id);
+        adapter.notifyDataSetChanged();
+        // always scroll to bottom
+        listview.setSelection(adapter.getCount() - 1);
+
+        toast(String.format(getString(R.string.skill_deleted), id));
     }
 
 
