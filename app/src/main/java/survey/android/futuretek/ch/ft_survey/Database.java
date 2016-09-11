@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Database extends SQLiteOpenHelper {
 
-	private static final int database_VERSION = 5;
+	private static final int database_VERSION = 6;
 	private static final String database_NAME = "FTSurveyDB";
 	private static final String tableAdminSettings = "admin_settings";
 	private static final String tableSkills = "skills";
