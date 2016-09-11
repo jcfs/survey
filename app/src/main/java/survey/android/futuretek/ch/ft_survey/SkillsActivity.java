@@ -141,16 +141,15 @@ public class SkillsActivity extends BaseActivity {
         TextView textView;
         Button delBtn;
         Button editBtn;
-
     }
 
     private void insertSkill(String skill) {
         try {
-
             // validate if the skill already exists
             String dbSkill = getDatabase().getSkill(skill);
 
             if (dbSkill != null) {
+                // toast showing the error message
                 toast(String.format(getString(R.string.skill_alreadyExists), dbSkill));
                 return;
             }
@@ -168,11 +167,11 @@ public class SkillsActivity extends BaseActivity {
     // new method to update the skill required by OPTIONAL ISSUE 2
     private void updateSkill(String oldSkill, String newSkill) {
         try {
-
             // validate if the new skill already exists
             String dbSkill = getDatabase().getSkill(newSkill);
 
             if (dbSkill != null) {
+                // toast showing the error message
                 toast(String.format(getString(R.string.skill_alreadyExists), dbSkill));
                 return;
             }
@@ -194,6 +193,7 @@ public class SkillsActivity extends BaseActivity {
         // always scroll to bottom
         listview.setSelection(adapter.getCount() - 1);
 
+        // toast showing the success message
         toast(String.format(getString(R.string.skill_deleted), id));
     }
 
