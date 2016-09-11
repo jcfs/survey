@@ -74,7 +74,7 @@ public class AboutJcfsActivity extends BaseActivity {
 
         textArray.add("Since you have been testing me this whole time, now it is the time for me to test you guys by giving you this cool riddle:");
         textArray.add("- - - - -");
-        textArray.add("I have three children and the product of their ages is seventy–two. The sum of their ages is the number on this gate.");
+        textArray.add("I have three children and the product of their ages is 36. The sum of their ages is the number on this gate.");
         textArray.add("Sorry I can't tell you more right now, I have to see to my eldest child who is in bed with measles.");
         textArray.add("What is the number of the gate?");
 

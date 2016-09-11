@@ -35,7 +35,7 @@ public class TextAnimator {
 
     private FadeyTextView animate(boolean animateFast, final Activity activity, final String text, final int scrollViewId, final int layoutId){
         final FadeyTextView textView = new FadeyTextView(activity);
-        textView.setDurationPerLetter(animateFast?30:150);
+        textView.setDurationPerLetter(30);
         activity.runOnUiThread(
             new Runnable() {
                 public void run() {
